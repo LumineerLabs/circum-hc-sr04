@@ -2,7 +2,7 @@
 
 ![build](https://travis-ci.com/LumineerLabs/circum-hc-sr04.svg?branch=master) ![PyPI](https://img.shields.io/pypi/v/circum-hc-sr04)
 
-HC-SR04 sensor plugin for [circum](https://github.com/LumineerLabs/circum).
+HC-SR04 & Raspberry Pi sensor plugin for [circum](https://github.com/LumineerLabs/circum).
 
 NOTE: this package installs, but it has not been tested with hardware.
 
