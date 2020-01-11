@@ -23,11 +23,15 @@ setup(
     ],
     packages=find_packages(exclude=["tests"]),
     install_requires=[
+        'Bluetin_Echo',
         'circum',
         'click',
         'setuptools-git-version'
     ],
     entry_points={
+        'console_scripts': [
+            'calibrate-hc-sr04=circum_hc_sr04.calibrate:cli',
+        ],
         'circum.sensors': [
             'hc-sr04=circum_hc_sr04.hc_sr04:hc_sr04'
         ]
