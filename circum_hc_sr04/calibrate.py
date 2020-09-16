@@ -1,7 +1,8 @@
-import click
 import logging
 
 from Bluetin_Echo import Echo
+
+import click
 
 
 logger = logging.getLogger(__name__)

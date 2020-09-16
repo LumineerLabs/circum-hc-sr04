@@ -1,10 +1,12 @@
-import click
-import circum.endpoint
 import copy
 import logging
-
 from threading import Semaphore, Thread
+
 from Bluetin_Echo import Echo
+
+import circum.endpoint
+
+import click
 
 
 logger = logging.getLogger(__name__)
@@ -37,7 +39,7 @@ def _update_thread(echo: Echo, samples: int):
         if targets and targets is not None:
             tracking_info["objects"] = \
                 [{"x": 0, "y": 0, "z": target / 100} for target in targets]
-            for i, target in enumerate(targets):
+            for target in targets:
                 logger.debug('Target distance: {}\n'.format(target))
         else:
             tracking_info["objects"] = []
