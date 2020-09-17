@@ -61,6 +61,23 @@ def run_hc_sr04(hc_sr04_args: {}) -> {}:
     return ret
 
 
+def hc_sr04(ctx,
+            num_samples,
+            trigger_pin,
+            echo_pin,
+            speed_of_sound,
+            threshold):
+    global tracking_semaphore
+    tracking_semaphore = Semaphore()
+
+    echo = Echo(trigger_pin, echo_pin, speed_of_sound)
+
+    tracker_thread = Thread(target=_update_thread, args=[echo, num_samples, threshold])
+    tracker_thread.daemon = True
+    tracker_thread.start()
+    circum.endpoint.start_endpoint(ctx, "cam", run_hc_sr04)
+
+
 @click.command()
 @click.option('--num-samples',
               required=False,
@@ -88,18 +105,15 @@ def run_hc_sr04(hc_sr04_args: {}) -> {}:
                    'returned so far. This accounts for unmoving objects in the sensors range at the cost of '
                    'missing moving objects that are present when the sensor starts.')
 @click.pass_context
-def hc_sr04(ctx,
-            num_samples: int,
-            trigger_pin: int,
-            echo_pin: int,
-            speed_of_sound: int,
-            threshold: int):
-    global tracking_semaphore
-    tracking_semaphore = Semaphore()
-
-    echo = Echo(trigger_pin, echo_pin, speed_of_sound)
-
-    tracker_thread = Thread(target=_update_thread, args=[echo, num_samples, threshold])
-    tracker_thread.daemon = True
-    tracker_thread.start()
-    circum.endpoint.start_endpoint(ctx, "cam", run_hc_sr04)
+def hc_sr04_command(ctx,
+                    num_samples: int,
+                    trigger_pin: int,
+                    echo_pin: int,
+                    speed_of_sound: int,
+                    threshold: int):
+    hc_sr04(ctx,
+            num_samples,
+            trigger_pin,
+            echo_pin,
+            speed_of_sound,
+            threshold)
