@@ -22,6 +22,8 @@
 
 # pulled from https://github.com/MarkAHeywood/Bluetin_Python_Echo to bypass dependency on Rpi.GPIO
 
+# flake8: noqa
+
 # Python 2 & 3 print function compatibility
 from __future__ import print_function
 

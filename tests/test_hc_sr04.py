@@ -1,5 +1,5 @@
-import sys
-from unittest.mock import DEFAULT, MagicMock, PropertyMock, call, patch
+import sys  # noqa: F401
+from unittest.mock import DEFAULT, MagicMock, call, patch
 
 import pytest
 
@@ -13,7 +13,7 @@ def test_hc_sr04():
                 with patch("circum.endpoint.start_endpoint") as endpoint:
                     import circum.endpoint  # noqa: F401
 
-                    import circum_hc_sr04.hc_sr04
+                    import circum_hc_sr04.hc_sr04  # noqa: F401
                     from circum_hc_sr04.hc_sr04 import hc_sr04, run_hc_sr04
 
                     echo_class.return_value = MagicMock()
