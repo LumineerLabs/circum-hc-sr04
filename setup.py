@@ -23,9 +23,11 @@ setup(
     ],
     packages=find_packages(exclude=["tests"]),
     install_requires=[
-        'Bluetin_Echo',
+        'gpiod',
+        'RPi.GPIO2',
         'circum',
         'click',
+        'pytest',
         'setuptools-git-version'
     ],
     entry_points={

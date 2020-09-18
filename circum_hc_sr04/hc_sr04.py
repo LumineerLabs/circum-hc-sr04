@@ -2,9 +2,7 @@ import copy
 import logging
 from threading import Semaphore, Thread
 
-from Bluetin_Echo import Echo
-
-import circum.endpoint
+from circum_hc_sr04.Bluetin_Echo.Bluetin_Echo import Echo
 
 import click
 
@@ -26,19 +24,19 @@ def _get_targets(echo: Echo, samples: int, threshold: int) -> [int]:
     return []
 
 
-def _update_thread(echo: Echo, samples: int):
+def _update_thread(echo: Echo, samples: int, threshold: int):
     global tracking_info
     global vector_info
     global updated
 
     while True:
-        targets = _get_targets(echo, samples)
+        targets = _get_targets(echo, samples, threshold)
 
         tracking_semaphore.acquire()
 
-        if targets and targets is not None:
+        if targets:
             tracking_info["objects"] = \
-                [{"x": 0, "y": 0, "z": target / 100} for target in targets]
+                [{"x": 0, "y": 0, "z": target / 100.0} for target in targets]
             for target in targets:
                 logger.debug('Target distance: {}\n'.format(target))
         else:
@@ -61,21 +59,27 @@ def run_hc_sr04(hc_sr04_args: {}) -> {}:
     return ret
 
 
+def _create_tracker_thread(echo, num_samples, threshold):
+    tracker_thread = Thread(target=_update_thread, args=[echo, num_samples, threshold])
+    tracker_thread.daemon = True
+    tracker_thread.start()
+
+
 def hc_sr04(ctx,
             num_samples,
             trigger_pin,
             echo_pin,
             speed_of_sound,
             threshold):
+    import circum.endpoint
     global tracking_semaphore
     tracking_semaphore = Semaphore()
 
     echo = Echo(trigger_pin, echo_pin, speed_of_sound)
 
-    tracker_thread = Thread(target=_update_thread, args=[echo, num_samples, threshold])
-    tracker_thread.daemon = True
-    tracker_thread.start()
-    circum.endpoint.start_endpoint(ctx, "cam", run_hc_sr04)
+    _create_tracker_thread(echo, num_samples, threshold)
+
+    circum.endpoint.start_endpoint(ctx, "hc_sr04", run_hc_sr04)
 
 
 @click.command()
