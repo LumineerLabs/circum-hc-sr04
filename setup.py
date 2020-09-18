@@ -47,5 +47,6 @@ setup(
             'flake8-bandit',
             'flake8-bugbear',
         ]
-    }
+    },
+    python_requires=">=3.7",
 )
