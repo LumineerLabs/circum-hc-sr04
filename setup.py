@@ -50,6 +50,12 @@ setup(
             'flake8-comprehensions',
             'flake8-bandit',
             'flake8-bugbear',
+        ],
+        'linux': [
+            'RPi.GPIO2'
+        ],
+        'rpi': [
+            'RPi.GPIO'
         ]
     },
     python_requires=">=3.7",

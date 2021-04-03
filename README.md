@@ -6,14 +6,10 @@ HC-SR04 with Raspberry Pi sensor plugin for [circum](https://github.com/Lumineer
 
 ## Install
 
-```bash
-pip3 install circum-hc-sr04
-```
-
 ### Raspberry Pi
 
 ```bash
-pip3 install -r requirements-rpi.txt
+pip3 install circum-hc-sr04[rpi]
 ```
 
 ### Other Linux Distributions
@@ -23,7 +19,7 @@ NOTE: This configuration is not tested or supported beyond installation.
 First, install the libgpiod python bindings, this will vary by distribution. In Debian, Ubuntu, or derivatives use `sudo apt install python3-libgpiod`.
 
 ```bash
-pip3 install -r requirements-linux.txt
+pip3 install circum-hc-sr04[linux]
 ```
 
 ## Usage

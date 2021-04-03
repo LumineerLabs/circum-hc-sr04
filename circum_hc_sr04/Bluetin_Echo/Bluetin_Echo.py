@@ -30,14 +30,13 @@ from __future__ import print_function
 from time import time
 from time import monotonic
 from time import sleep
-import RPi.GPIO as GPIO
 
 GOOD = 0
 OUT_OF_RANGE = 1
 NOT_READY = 2
 
 class Echo(object):
-    # Use over 50ms measurement cycle. 
+    # Use over 50ms measurement cycle.
     def __init__(self, trigger_pin, echo_pin, mPerSecond = 343):
         self._trigger_pin = trigger_pin # Trigger Pin
         self._echo_pin = echo_pin # Echo Pin
@@ -54,12 +53,14 @@ class Echo(object):
         self._maxDistTimeOffset = 0.00067
         self._errorCode = 0
 
+        import RPi.GPIO as GPIO
+
         # Configure GPIO Pins
         try:
             # Use Broadcom (BCM) pin numbering for the GPIO pins.
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(self._trigger_pin, GPIO.OUT)
-            GPIO.setup(self._echo_pin, GPIO.IN)      
+            GPIO.setup(self._echo_pin, GPIO.IN)
             # Trigger 10us pulse for initial sensor cycling.
             GPIO.output(self._trigger_pin, False)
             sleep(0.5)
@@ -84,7 +85,7 @@ class Echo(object):
     This method returns an average from multiple sensor readings.
     The samples parameter allows you to choose how many sensor readings
     you want in the average sum. Failed sensor readings are excluded, and the
-    number of successful sensor readings is returned as the second parameter. 
+    number of successful sensor readings is returned as the second parameter.
     """
     def samples(self, samples = 10):
         # Take more than one sensor reads to get an average result.
@@ -96,7 +97,7 @@ class Echo(object):
                 if echoResult > 0:
                     samplesTotal = samplesTotal + echoResult
                     goodSamples = goodSamples + 1
-                    
+
                 sleep(self._sensor_rest) # Rest the sensor
 
             if goodSamples > 0:
@@ -106,9 +107,9 @@ class Echo(object):
                 return 0, 0
         else:
             return 0, 0
-            
+
     """
-    You use this method for either one-shot distance measuring, or to 
+    You use this method for either one-shot distance measuring, or to
     get an average from multiple distance measurements.
     Pass in parameters to change units of measure and number of measuring
     samples to take.
@@ -117,7 +118,7 @@ class Echo(object):
         if samples < 2: # Take one sensor reading
             echoTime = self._read()
             return self._valueToUnit(echoTime, unit)
-        
+
         # Take more than one sensor reads to get an average result.
         samplesTotal = 0
         goodSamples = 0
@@ -127,7 +128,7 @@ class Echo(object):
                 if echoResult > 0:
                     samplesTotal = samplesTotal + echoResult
                     goodSamples = goodSamples + 1
-                    
+
                 sleep(self._sensor_rest) # Rest the sensor
 
             if goodSamples > 0:
@@ -140,6 +141,7 @@ class Echo(object):
     Activate the sensor and return a new echo period.
     """
     def _read(self):
+        import RPi.GPIO as GPIO
         # Check if enough time has passed before triggering device.
         if (monotonic() - self._last_read_time) > self._sensor_rest:
             # Reset values
@@ -179,7 +181,7 @@ class Echo(object):
             # Device not rested enough, use last value.
             echoTime = 0
             self._errorCode = NOT_READY
-        
+
         # Return reading
         return echoTime
 
@@ -202,14 +204,15 @@ class Echo(object):
                 distance = (value * self._mPerSecond * 39.3701) / 2
         else:
             distance = 0
-            
+
         return distance
 
-    
+
     def stop(self):
+        import RPi.GPIO as GPIO
         # Reset GPIO settings
         GPIO.cleanup()
-        
+
     """
     Calculate the speed of sound by measuring a known distance with the
     sensor.
@@ -222,7 +225,7 @@ class Echo(object):
             multiplier = 100
         else: # Must be inch then
             multiplier = 39.3701
-            
+
         self._mPerSecond = ((dValue * 2) / multiplier / self._last_read)
         return self._mPerSecond
 
@@ -251,7 +254,7 @@ class Echo(object):
             else:
                 # Bad values passed by user
                 pass
-            
+
         else:
             # Bad values passed by user
             pass
@@ -267,7 +270,7 @@ class Echo(object):
             return True
         else:
             return False
-    
+
     """
     poll to return error code for the last sensor reading.
     0 = Good, 1 = Out of range and 2 = Not ready.
@@ -284,7 +287,7 @@ class Echo(object):
     def speed(self):
         return self._mPerSecond
 
-    
+
     @speed.setter
     def speed(self, speedOfSound):
         self._mPerSecond = speedOfSound
@@ -302,7 +305,7 @@ class Echo(object):
     def rest(self):
         return self._sensor_rest
 
-    
+
     @rest.setter
     def rest(self, sDelay):
         self._sensor_rest = sDelay
@@ -316,7 +319,7 @@ class Echo(object):
     def trigger_timeout(self):
         return self._triggerTimeout
 
-        
+
     @trigger_timeout.setter
     def trigger_timeout(self, timeout):
         self._triggerTimeout = timeout
@@ -331,11 +334,11 @@ class Echo(object):
     def echo_timeout(self):
         return self._maxDistanceTime
 
-        
+
     @echo_timeout.setter
     def echo_timeout(self, timeout):
         self._maxDistanceTime = timeout
-    
+
     """
     This offset adds a bit of time to the Max distance setting time.
     Add a bit more time to the offset value if the sensor goes out
@@ -361,7 +364,7 @@ class Echo(object):
     def default_unit(self):
         return self._defaultUnit
 
-    
+
     @default_unit.setter
     def default_unit(self, unit):
         unitPass = False
