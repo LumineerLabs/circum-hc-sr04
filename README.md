@@ -2,14 +2,28 @@
 
 ![build](https://travis-ci.com/LumineerLabs/circum-hc-sr04.svg?branch=master) ![PyPI](https://img.shields.io/pypi/v/circum-hc-sr04)
 
-HC-SR04 & Raspberry Pi sensor plugin for [circum](https://github.com/LumineerLabs/circum).
-
-NOTE: this package installs, but it has not been tested with hardware.
+HC-SR04 with Raspberry Pi sensor plugin for [circum](https://github.com/LumineerLabs/circum).
 
 ## Install
 
 ```bash
 pip3 install circum-hc-sr04
+```
+
+### Raspberry Pi
+
+```bash
+pip3 install -r requirements-rpi.txt
+```
+
+### Other Linux Distributions
+
+NOTE: This configuration is not tested or supported beyond installation.
+
+First, install the libgpiod python bindings, this will vary by distribution. In Debian, Ubuntu, or derivatives use `sudo apt install python3-libgpiod`.
+
+```bash
+pip3 install -r requirements-linux.txt
 ```
 
 ## Usage
@@ -34,6 +48,7 @@ Options:
 ```
 
 To get more accurate readings, you can calibrate the sensor. Place an object a known distance from the sensor and pass the appropriate values to the calibration script. This will result in a value that can be passed to the endpoint sensor.
+
 ```bash
 Usage: calibrate-hc-sr04 [OPTIONS]
 

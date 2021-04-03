@@ -25,8 +25,6 @@ setup(
     install_requires=[
         'circum',
         'click',
-        'gpiod',
-        'RPi.GPIO2',
     ],
     setup_requires=[
         'setuptools',
