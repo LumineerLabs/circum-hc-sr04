@@ -41,7 +41,7 @@ setup(
             'calibrate-hc-sr04=circum_hc_sr04.calibrate:cli',
         ],
         'circum.sensors': [
-            'hc-sr04=circum_hc_sr04.hc_sr04:hc_sr04_command'
+            'hc-sr04=circum_hc_sr04.hc_sr04:hc_sr04'
         ]
     },
     extras_require={
