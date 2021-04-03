@@ -23,12 +23,18 @@ setup(
     ],
     packages=find_packages(exclude=["tests"]),
     install_requires=[
-        'gpiod',
-        'RPi.GPIO2',
         'circum',
         'click',
+        'gpiod',
+        'RPi.GPIO2',
+    ],
+    setup_requires=[
+        'setuptools',
+        'setuptools-git-version',
+    ],
+    tests_require=[
         'pytest',
-        'setuptools-git-version'
+        'pytest-cov',
     ],
     entry_points={
         'console_scripts': [
