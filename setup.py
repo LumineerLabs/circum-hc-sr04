@@ -7,6 +7,12 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 
+test_requirements = [
+    'pytest',
+    'pytest-cov',
+]
+
+
 setup(
     name='circum-hc-sr04',
     version_format='{tag}',
@@ -30,10 +36,7 @@ setup(
         'setuptools',
         'setuptools-git-version',
     ],
-    tests_require=[
-        'pytest',
-        'pytest-cov',
-    ],
+    tests_require=test_requirements,
     entry_points={
         'console_scripts': [
             'calibrate-hc-sr04=circum_hc_sr04.calibrate:cli',
@@ -56,7 +59,8 @@ setup(
         ],
         'rpi': [
             'RPi.GPIO'
-        ]
+        ],
+        'test': test_requirements,
     },
     python_requires=">=3.7",
 )

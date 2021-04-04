@@ -12,17 +12,18 @@ import pytest
 def test_hc_sr04():
     with patch.dict('sys.modules', {'RPi.GPIO': MagicMock()}):
         top = MagicMock()
+        echo = MagicMock()
 
-        with patch("circum_hc_sr04.Bluetin_Echo.Bluetin_Echo.Echo") as echo_class:
+        with patch("circum_hc_sr04.hc_sr04._load_echo") as echo_class:
             with patch("circum_hc_sr04.hc_sr04._create_tracker_thread") as thread:
                 with patch("circum.endpoint.start_endpoint") as endpoint:
-                    echo_class.return_value = MagicMock()
+                    echo_class.return_value = echo
 
                     expected_calls = [
                         # initialize Echo
                         call.echo(1, 2, 3),
                         # _create_tracker_thread
-                        call.thread(echo_class(), 0, 4),
+                        call.thread(echo, 0, 4),
                         # start endpoint
                         call.endpoint(None, 'hc_sr04', run_hc_sr04),
                     ]
@@ -82,7 +83,7 @@ def test__update_thread_gettargets_returns_above_threshold():
 
             echo.assert_has_calls(expected_calls)
 
-            circum_hc_sr04.hc_sr04.tracking_info["objects"] == []
+            assert circum_hc_sr04.hc_sr04.tracking_info["objects"] == []
 
 
 def test__update_thread_gettargets_returns_target_once():
@@ -108,13 +109,8 @@ def test__update_thread_gettargets_returns_target_once():
                 call.read('cm', 0),
             ]
 
-            expected_targets = [
-                {
-                    "x": 0,
-                    "y": 0,
-                    "z": 2
-                }
-            ]
+            # first reading sets the max read
+            expected_targets = []
 
             assert not circum_hc_sr04.hc_sr04.updated
 
@@ -127,7 +123,7 @@ def test__update_thread_gettargets_returns_target_once():
 
             echo.assert_has_calls(expected_calls)
 
-            circum_hc_sr04.hc_sr04.tracking_info["objects"] == expected_targets
+            assert circum_hc_sr04.hc_sr04.tracking_info["objects"] == expected_targets
 
 
 def test__update_thread_gettargets_returns_target_multiple():
@@ -140,7 +136,7 @@ def test__update_thread_gettargets_returns_target_multiple():
 
             # run the loop once, then except out
             echo.read = MagicMock()
-            echo.read.side_effect = [200, 201, EndLoopException]
+            echo.read.side_effect = [400, 201, EndLoopException]
 
             expected_calls = [
                 # _get_targets
@@ -168,7 +164,7 @@ def test__update_thread_gettargets_returns_target_multiple():
             assert not circum_hc_sr04.hc_sr04.updated
 
             with pytest.raises(EndLoopException):
-                _update_thread(echo, 0, 250)
+                _update_thread(echo, 0, 10)
 
             assert circum_hc_sr04.hc_sr04.updated
 
@@ -176,7 +172,7 @@ def test__update_thread_gettargets_returns_target_multiple():
 
             echo.assert_has_calls(expected_calls)
 
-            circum_hc_sr04.hc_sr04.tracking_info["objects"] == expected_targets
+            assert circum_hc_sr04.hc_sr04.tracking_info["objects"] == expected_targets
 
 
 def test_run_hc_sr04_updated_false():

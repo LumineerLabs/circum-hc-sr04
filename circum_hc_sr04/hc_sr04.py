@@ -65,6 +65,12 @@ def _create_tracker_thread(echo, num_samples, threshold):
     tracker_thread.start()
 
 
+def _load_echo(trigger_pin: int,
+               echo_pin: int,
+               speed_of_sound: int):
+    return Echo(trigger_pin, echo_pin, speed_of_sound)
+
+
 def _hc_sr04(ctx,
              num_samples: int,
              trigger_pin: int,
@@ -75,7 +81,9 @@ def _hc_sr04(ctx,
     global tracking_semaphore
     tracking_semaphore = Semaphore()
 
-    echo = Echo(trigger_pin, echo_pin, speed_of_sound)
+    echo = _load_echo(trigger_pin,
+                      echo_pin,
+                      speed_of_sound)
 
     _create_tracker_thread(echo, num_samples, threshold)
 

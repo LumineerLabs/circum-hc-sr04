@@ -24,8 +24,6 @@
 
 # flake8: noqa
 
-# Python 2 & 3 print function compatibility
-from __future__ import print_function
 
 from time import time
 from time import monotonic
@@ -34,6 +32,7 @@ from time import sleep
 GOOD = 0
 OUT_OF_RANGE = 1
 NOT_READY = 2
+
 
 class Echo(object):
     # Use over 50ms measurement cycle.
