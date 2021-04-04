@@ -3,6 +3,9 @@ from unittest.mock import DEFAULT, MagicMock, call, patch
 
 import circum.endpoint  # noqa: F401
 
+import circum_hc_sr04.hc_sr04
+from circum_hc_sr04.hc_sr04 import _hc_sr04, _update_thread, run_hc_sr04
+
 import pytest
 
 
