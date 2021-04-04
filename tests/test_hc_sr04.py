@@ -1,6 +1,8 @@
 import sys  # noqa: F401
 from unittest.mock import DEFAULT, MagicMock, call, patch
 
+import circum.endpoint  # noqa: F401
+
 import pytest
 
 
