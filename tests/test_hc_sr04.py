@@ -32,7 +32,7 @@ def test_hc_sr04():
                     top.attach_mock(thread, 'thread')
                     top.attach_mock(endpoint, 'endpoint')
 
-                    hc_sr04(None, 0, 1, 2, 3, 4)
+                    _hc_sr04(None, 0, 1, 2, 3, 4)
 
                     top.assert_has_calls(expected_calls)
 

@@ -65,6 +65,23 @@ def _create_tracker_thread(echo, num_samples, threshold):
     tracker_thread.start()
 
 
+def _hc_sr04(ctx,
+             num_samples: int,
+             trigger_pin: int,
+             echo_pin: int,
+             speed_of_sound: int,
+             threshold: int):
+    import circum.endpoint
+    global tracking_semaphore
+    tracking_semaphore = Semaphore()
+
+    echo = Echo(trigger_pin, echo_pin, speed_of_sound)
+
+    _create_tracker_thread(echo, num_samples, threshold)
+
+    circum.endpoint.start_endpoint(ctx, "hc_sr04", run_hc_sr04)
+
+
 @click.command()
 @click.option('--num-samples',
               required=False,
@@ -98,12 +115,9 @@ def hc_sr04(ctx,
             echo_pin: int,
             speed_of_sound: int,
             threshold: int):
-    import circum.endpoint
-    global tracking_semaphore
-    tracking_semaphore = Semaphore()
-
-    echo = Echo(trigger_pin, echo_pin, speed_of_sound)
-
-    _create_tracker_thread(echo, num_samples, threshold)
-
-    circum.endpoint.start_endpoint(ctx, "hc_sr04", run_hc_sr04)
+    _hc_sr04(ctx,
+             num_samples,
+             trigger_pin,
+             echo_pin,
+             speed_of_sound,
+             threshold)
