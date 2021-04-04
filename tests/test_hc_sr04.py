@@ -13,7 +13,6 @@ def test_hc_sr04():
         with patch("circum_hc_sr04.Bluetin_Echo.Bluetin_Echo.Echo") as echo_class:
             with patch("circum_hc_sr04.hc_sr04._create_tracker_thread") as thread:
                 with patch("circum.endpoint.start_endpoint") as endpoint:
-                    import circum.endpoint  # noqa: F401
 
                     import circum_hc_sr04.hc_sr04  # noqa: F401
                     from circum_hc_sr04.hc_sr04 import hc_sr04, run_hc_sr04
