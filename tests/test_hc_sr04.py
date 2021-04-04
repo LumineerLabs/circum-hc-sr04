@@ -16,10 +16,6 @@ def test_hc_sr04():
         with patch("circum_hc_sr04.Bluetin_Echo.Bluetin_Echo.Echo") as echo_class:
             with patch("circum_hc_sr04.hc_sr04._create_tracker_thread") as thread:
                 with patch("circum.endpoint.start_endpoint") as endpoint:
-
-                    import circum_hc_sr04.hc_sr04  # noqa: F401
-                    from circum_hc_sr04.hc_sr04 import hc_sr04, run_hc_sr04
-
                     echo_class.return_value = MagicMock()
 
                     expected_calls = [
@@ -56,9 +52,6 @@ def test__update_thread_gettargets_returns_above_threshold():
     echo = MagicMock()
 
     with patch.dict('sys.modules', {'RPi.GPIO': MagicMock()}):
-        import circum_hc_sr04
-        from circum_hc_sr04.hc_sr04 import _update_thread
-
         with patch("circum_hc_sr04.hc_sr04.tracking_semaphore") as tracking_semaphore:
 
             echo.attach_mock(tracking_semaphore, 'tracking_semaphore')
@@ -96,9 +89,6 @@ def test__update_thread_gettargets_returns_target_once():
     echo = MagicMock()
 
     with patch.dict('sys.modules', {'RPi.GPIO': MagicMock()}):
-        import circum_hc_sr04
-        from circum_hc_sr04.hc_sr04 import _update_thread
-
         with patch("circum_hc_sr04.hc_sr04.tracking_semaphore") as tracking_semaphore:
 
             echo.attach_mock(tracking_semaphore, 'tracking_semaphore')
@@ -144,9 +134,6 @@ def test__update_thread_gettargets_returns_target_multiple():
     echo = MagicMock()
 
     with patch.dict('sys.modules', {'RPi.GPIO': MagicMock()}):
-        import circum_hc_sr04
-        from circum_hc_sr04.hc_sr04 import _update_thread
-
         with patch("circum_hc_sr04.hc_sr04.tracking_semaphore") as tracking_semaphore:
 
             echo.attach_mock(tracking_semaphore, 'tracking_semaphore')
@@ -192,11 +179,8 @@ def test__update_thread_gettargets_returns_target_multiple():
             circum_hc_sr04.hc_sr04.tracking_info["objects"] == expected_targets
 
 
-def test_run_walabot_updated_false():
+def test_run_hc_sr04_updated_false():
     with patch.dict('sys.modules', {'RPi.GPIO': MagicMock()}):
-        import circum_hc_sr04
-        from circum_hc_sr04.hc_sr04 import run_hc_sr04
-
         with patch("circum_hc_sr04.hc_sr04.tracking_semaphore") as tracking_semaphore:
             expected_calls = [
                 call.acquire(),
@@ -209,11 +193,8 @@ def test_run_walabot_updated_false():
             tracking_semaphore.assert_has_calls(expected_calls)
 
 
-def test_run_walabot_updated_true():
+def test_run_hc_sr04_updated_true():
     with patch.dict('sys.modules', {'RPi.GPIO': MagicMock()}):
-        import circum_hc_sr04
-        from circum_hc_sr04.hc_sr04 import run_hc_sr04
-
         with patch("circum_hc_sr04.hc_sr04.tracking_semaphore") as tracking_semaphore:
             expected_calls = [
                 call.acquire(),
